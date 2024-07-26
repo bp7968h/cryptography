@@ -30,12 +30,12 @@ cryptography = { git = "https://github.com/your-username/cryptography.git" }
 Then, you can compute a SHA-1 hash as follows:
 
 ```
-use cryptography;
+use cryptography::SHA1;
 
 fn main() {
-    let data = "Hello, world!";
-    let sha1_digest = cryptography::sha1::hash(data);
-    println!("SHA-1 Digest: {:?}", sha1_digest);
+    let mut sha1 = SHA1::new();
+    let result = sha1.hash("example");
+    println!("SHA-1 hash: {}", result);
 }
 ```
 
