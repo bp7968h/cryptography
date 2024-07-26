@@ -9,7 +9,14 @@ pub struct SHA1{
 
 impl SHA1{
     pub fn new() -> Self {
-        SHA1{}
+        SHA1{
+            h0: 0x67452301,
+            h1: 0xEFCDAB89,
+            h2: 0x98BADCFE,
+            h3: 0x10325476,
+            h4: 0xC3D2E1F0,
+            w: [0;80],
+        }
     }
 
     pub fn hash(&mut self, data: &str) -> String {
@@ -50,8 +57,21 @@ impl SHA1{
             self.h2 = self.h2.wrapping_add(c);
             self.h3 = self.h3.wrapping_add(d);
             self.h4 = self.h4.wrapping_add(e);
-
         }
+
+        let hashed_str = self.get_hashed_str();
+
+        hashed_str
+    }
+
+    fn get_hashed_str(&self) -> String {
+        let hash_arr = [self.h0.to_be_bytes(), self.h1.to_be_bytes(), self.h2.to_be_bytes(), self.h3.to_be_bytes(), self.h4.to_be_bytes()];
+
+        let flat_bytes: Vec<u8> = hash_arr.iter().flatten().copied().collect();
+
+        // let hashed_str = String::from_utf8(flat_bytes).unwrap();
+        flat_bytes.iter().map(|b| format!("{:02x}", b)).collect::<String>()
+
     }
 
     fn get_sequence(&self, index: usize, b: u32, c: u32, d: u32) -> (u32, u32) {
@@ -91,9 +111,11 @@ impl SHA1{
         let mut bytes: Vec<u8> = original_msg.as_bytes().to_vec();
         let original_bit_len = bytes.len() as usize * 8;
 
+        //Add single one along with zeros
         bytes.push(0b10000000);
 
         while (bytes.len() * 8) % 512 != 448 {
+            //0 is same as 00000000
             bytes.push(0);
         }
 
