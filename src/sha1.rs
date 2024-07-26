@@ -1,39 +1,27 @@
-pub fn hash(data: &str) -> String {
-    //data in a bit string
-    let binary_str = bit_string(data.as_bytes());
+pub struct SHA1;
 
-    binary_str
-
-}
-
-fn bit_string(arr_bytes: &[u8]) -> String {
-    let mut binary_str = String::new();
-    for byte in arr_bytes.iter(){
-        binary_str.push_str(&format!("{:08b}", byte));
+impl SHA1{
+    pub fn new() -> Self {
+        SHA1{}
     }
-    binary_str
-}
 
-fn pad(bit_str: &mut String) {
-    //First append 1 to the original bit string
-    bit_str.push('1');
-    
-    let append_length = bit_str.len();
-    let zeros_to_append = "0".repeat(448 - bit_str.len());
-    
-    //Now pad remaining with zeros
-    bit_str.push_str(&zeros_to_append);
-}
+    pub fn hash(&mut self, data: &str) -> String {
+        // pad the original message until it is 512 bit length or 64 byte
+        let padded_msg = self.pad_msg(data);
+    }
 
-fn get_2word(original_length: usize) -> (String, String){
-    // A word is a 32 bit string, or 4byte string
-    let first_word = String::with_capacity(4);
-    let second_word = String::with_capacity(4);
-    
-    match original_length {
-        length if length <= 2usize.pow(32) => {
-            ("less".to_string(), "less".to_string())
-        },
-        _ => ("more".to_string(), "more".to_string())
+    fn pad_msg(&self, original_msg: &str) -> Vec<u8> {
+        let mut bytes: Vec<u8> = original_msg.as_bytes().to_vec();
+        let original_bit_len = bytes.len() as usize * 8;
+
+        bytes.push(0b10000000);
+
+        while (bytes.len() * 8) % 512 != 448 {
+            bytes.push(0);
+        }
+
+        bytes.extend_from_slice(&(original_bit_len).to_be_bytes());
+
+        bytes
     }
 }
