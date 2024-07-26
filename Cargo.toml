@@ -2,6 +2,11 @@
 name = "cryptography"
 version = "0.1.0"
 edition = "2021"
+authors = ["Bhuwan Pandit"]
+description = "A simple cryptographic library sha encoding and decoding"
+repository = "https://github.com/bp7968h/cryptography"
+homepage = "https://github.com/bp7968h/cryptography"
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
