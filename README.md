@@ -12,7 +12,7 @@ Ensure you have Rust installed. If not, you can install it by following the inst
 Clone the repository to begin exploring the hash functions:
 
 ```bash
-git clone https://github.com/your-username/cryptography.git
+git clone https://github.com/bp7968h/cryptography.git
 cd cryptography
 ```
 
@@ -25,7 +25,7 @@ SHA-1 (Secure Hash Algorithm 1) is a cryptographic hash function which produces 
 To use the SHA-1 function in your Rust code, first ensure you have the library included in your `Cargo.toml`:
 ```
 [dependencies]
-cryptography = { git = "https://github.com/your-username/cryptography.git" }
+cryptography = { git = "https://github.com/bp7968h/cryptography.git" }
 ```
 Then, you can compute a SHA-1 hash as follows:
 
