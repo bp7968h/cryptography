@@ -25,6 +25,36 @@ impl SHA1{
 
             // Compute W1....W15 from the padded message
             self.compute_16_word();
+
+            // For t = 0 to 79 do
+            // TEMP = S^5(A) + f(t;B,C,D) + E + W(t) + K(t);
+            // E = D;  D = C;  C = S^30(B);  B = A; A = TEMP;
+            let (mut a, mut b, mut c, mut d, mut e) = (self.h0, self.h1, self.h2, self.h3, self.h4);
+
+            for index in 0..=79 {
+                let (sequence_logical_value, sequence_constant) = self.get_sequence(index, b, c, d);
+            }
+        }
+    }
+
+    fn get_sequence(&self, index: usize, b: u32, c: u32, d: u32) -> (u32, u32) {
+        match index {
+            0..=19 => {
+                // (B AND C) OR ((NOT B) AND D)
+                ((b & c) | ((!b) & d), 0x5A827999)
+            },
+            20..=39 => {
+                // B XOR C XOR D
+                ((b ^ c ^ d),0x6ED9EBA1)
+            },
+            40..=59 => {
+                // (B AND C) OR (B AND D) OR (C AND D)
+                ((b & c) | (b & d) | (c & d), 0x8F1BBCDC)
+            },
+            _ => {
+                // B XOR C XOR D
+                ((b ^ c ^ d), 0xCA62C1D6)
+            },
         }
     }
 
