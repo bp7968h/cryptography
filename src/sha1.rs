@@ -33,7 +33,24 @@ impl SHA1{
 
             for index in 0..=79 {
                 let (sequence_logical_value, sequence_constant) = self.get_sequence(index, b, c, d);
+
+                //TEMP = S^5(A) + f(t;B,C,D) + E + W(t) + K(t);
+                let temp: u32 =  ((a << 5) | (a >> 32-5)).wrapping_add(sequence_logical_value)
+                                    .wrapping_add(e)
+                                    .wrapping_add(self.w[index])
+                                    .wrapping_add(sequence_constant);
+
+                // E = D;  D = C;  C = S^30(B);  B = A; A = TEMP;
+                e = d; d = c; c = (b << 30) | (b >> 32 - 30); b = a; a = temp;
             }
+
+            // Let H0 = H0 + A, H1 = H1 + B, H2 = H2 + C, H3 = H3 + D, H4 = H4 + E
+            self.h0 = self.h0.wrapping_add(a);
+            self.h1 = self.h1.wrapping_add(b);
+            self.h2 = self.h2.wrapping_add(c);
+            self.h3 = self.h3.wrapping_add(d);
+            self.h4 = self.h4.wrapping_add(e);
+
         }
     }
 
