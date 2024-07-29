@@ -34,7 +34,9 @@ use cryptography::SHA1;
 
 fn main() {
     let mut sha1 = SHA1::new();
-    let result = sha1.hash("example");
+    let result_arr: Vec<u8> = sha1.hash("example");
+    
+    let result = result_arr.iter().map(|b| format!("{:02x}", b)).collect::<String>();
     println!("SHA-1 hash: {}", result);
 }
 ```

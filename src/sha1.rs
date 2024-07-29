@@ -19,7 +19,7 @@ impl SHA1{
         }
     }
 
-    pub fn hash(&mut self, data: &str) -> String {
+    pub fn hash(&mut self, data: &str) -> Vec<u8> {
         // pad the original message until it is 512 bit length or 64 byte
         let padded_msg = self.pad_msg(data);
 
@@ -59,20 +59,26 @@ impl SHA1{
             self.h4 = self.h4.wrapping_add(e);
         }
 
-        let hashed_str = self.get_hashed_str();
+        // let hashed_str = self.get_hashed_str();
 
-        hashed_str
-    }
+        // hashed_str
 
-    fn get_hashed_str(&self) -> String {
         let hash_arr = [self.h0.to_be_bytes(), self.h1.to_be_bytes(), self.h2.to_be_bytes(), self.h3.to_be_bytes(), self.h4.to_be_bytes()];
 
         let flat_bytes: Vec<u8> = hash_arr.iter().flatten().copied().collect();
 
-        // let hashed_str = String::from_utf8(flat_bytes).unwrap();
-        flat_bytes.iter().map(|b| format!("{:02x}", b)).collect::<String>()
-
+        flat_bytes
     }
+
+    // fn get_hashed_str(&self) -> String {
+    //     let hash_arr = [self.h0.to_be_bytes(), self.h1.to_be_bytes(), self.h2.to_be_bytes(), self.h3.to_be_bytes(), self.h4.to_be_bytes()];
+
+    //     let flat_bytes: Vec<u8> = hash_arr.iter().flatten().copied().collect();
+
+    //     // let hashed_str = String::from_utf8(flat_bytes).unwrap();
+    //     flat_bytes.iter().map(|b| format!("{:02x}", b)).collect::<String>()
+
+    // }
 
     fn get_sequence(&self, index: usize, b: u32, c: u32, d: u32) -> (u32, u32) {
         match index {
